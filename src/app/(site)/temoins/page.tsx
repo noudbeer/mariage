@@ -1,5 +1,7 @@
 import { loadTemoins } from "@/lib/temoins";
 
+export const dynamic = "force-dynamic";
+
 export default function TemoinsPage() {
   const temoins = loadTemoins();
 
