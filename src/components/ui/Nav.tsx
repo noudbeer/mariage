@@ -2,6 +2,7 @@ import { getSession } from "@/lib/session";
 import { getHouseholdById } from "@/lib/guests";
 import { config } from "@/lib/config";
 import LogoutButton from "./LogoutButton";
+import MobileNav from "./MobileNav";
 
 export default async function Nav() {
   const session = await getSession();
@@ -23,27 +24,27 @@ export default async function Nav() {
           Tiffany &amp; Simon
         </a>
 
-        <div className="flex items-center gap-5">
+        <MobileNav>
           {isGuest ? (
             <>
-              <a href="/programme" className="hover:underline">
+              <a href="/programme" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                 Programme
               </a>
-              <a href="/rsvp" className="hover:underline">
+              <a href="/rsvp" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                 Ma présence
               </a>
-              <a href="/galerie" className="hover:underline">
+              <a href="/galerie" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                 Photos
               </a>
-              <a href="/temoins" className="hover:underline">
+              <a href="/temoins" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                 Témoins
               </a>
               {isAdmin && (
                 <>
-                  <a href="/admin" className="hover:underline">
+                  <a href="/admin" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                     Suivi RSVP
                   </a>
-                  <a href="/theme" className="hover:underline">
+                  <a href="/theme" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                     Thème
                   </a>
                 </>
@@ -52,7 +53,7 @@ export default async function Nav() {
             </>
           ) : (
             <>
-              <a href="/contact" className="hover:underline">
+              <a href="/contact" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                 Contact
               </a>
               <a
@@ -63,7 +64,7 @@ export default async function Nav() {
               </a>
             </>
           )}
-        </div>
+        </MobileNav>
       </nav>
     </header>
   );
