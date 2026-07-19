@@ -1,0 +1,8 @@
+node_modules
+.next
+.git
+data/rsvp.db
+data/rsvp.db-*
+.env
+.env.*
+*.md

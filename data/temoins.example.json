@@ -1,0 +1,18 @@
+{
+  "temoins": [
+    {
+      "prenom": "Prénom",
+      "nom": "Nom",
+      "role": "Témoin de Tiffany",
+      "telephone": "06 00 00 00 00",
+      "email": "temoin1@example.com"
+    },
+    {
+      "prenom": "Prénom",
+      "nom": "Nom",
+      "role": "Témoin de Simon",
+      "telephone": "06 00 00 00 00",
+      "email": "temoin2@example.com"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+/*
+ * Palette provisoire (corail pastel). Le choix définitif (corail vs vert d'eau)
+ * se valide sur /theme : changer les valeurs ci-dessous suffit à re-thémer tout
+ * le site, aucun composant à toucher.
+ */
+:root {
+  --background: #fffaf7;
+  --foreground: #3a2c28;
+
+  --color-primary: #e08a72;
+  --color-primary-soft: #f3c9bb;
+  --color-accent: #d8b48f;
+  --color-bg: #fffaf7;
+  --color-surface: #ffffff;
+  --color-text: #3a2c28;
+  --color-text-muted: #8a7a74;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-script: var(--font-script);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}

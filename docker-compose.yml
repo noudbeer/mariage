@@ -1,0 +1,37 @@
+# Avant le premier démarrage, préparer les fichiers de données sur l'hôte :
+#   touch data/rsvp.db && chmod 666 data/rsvp.db
+# Le conteneur tourne avec un utilisateur non-root (uid 1001) : sans ce chmod, l'écriture
+# dans rsvp.db (bind-mount d'un fichier hôte) échoue avec "attempt to write a readonly database".
+
+services:
+  mariage-web:
+    build: .
+    image: mariage-tiffany-simon:latest
+    container_name: mariage-web
+    restart: unless-stopped
+    # Une seule réplique : le rate limiting de /connexion est en mémoire (voir src/lib/rateLimit.ts).
+    deploy:
+      replicas: 1
+    env_file:
+      - .env
+    volumes:
+      - ./data/guests.json:/app/data/guests.json:ro
+      - ./data/temoins.json:/app/data/temoins.json:ro
+      - ./data/rsvp.db:/app/data/rsvp.db
+    # networks:
+    #   - caddy
+
+# networks:
+#   caddy:
+#     external: true
+    # Réseau Docker partagé avec le conteneur Caddy déjà en place sur le NAS
+    # (le même réseau que celui utilisé pour Immich, par ex. `caddy` ou `proxy`
+    # selon la configuration existante — à adapter au nom réel).
+
+# --- Extrait Caddyfile à ajouter à la configuration Caddy existante sur le NAS ---
+#
+# mariage.mondomaine.fr {
+#     reverse_proxy mariage-web:3000
+# }
+#
+# Caddy gère automatiquement le certificat HTTPS (Let's Encrypt) pour ce sous-domaine.

@@ -1,0 +1,66 @@
+{
+  "foyers": [
+    {
+      "id": "foyer-dupont",
+      "membres": [
+        {
+          "id": "jean-dupont",
+          "prenom": "Jean",
+          "nom": "Dupont",
+          "email": "jean.dupont@example.com",
+          "invitations": {
+            "ceremonie_religieuse": true,
+            "vin_honneur": true,
+            "repas": true,
+            "soiree": true,
+            "brunch_lendemain": true
+          }
+        },
+        {
+          "id": "lea-dupont",
+          "prenom": "Léa",
+          "nom": "Dupont",
+          "email": "lea.dupont@example.com",
+          "invitations": {
+            "ceremonie_religieuse": true,
+            "vin_honneur": true,
+            "repas": true,
+            "soiree": true,
+            "brunch_lendemain": true
+          }
+        },
+        {
+          "id": "tom-dupont",
+          "prenom": "Tom",
+          "nom": "Dupont",
+          "email": null,
+          "invitations": {
+            "ceremonie_religieuse": true,
+            "vin_honneur": true,
+            "repas": true,
+            "soiree": false,
+            "brunch_lendemain": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "foyer-martin",
+      "membres": [
+        {
+          "id": "claire-martin",
+          "prenom": "Claire",
+          "nom": "Martin",
+          "email": "claire.martin@example.com",
+          "invitations": {
+            "ceremonie_religieuse": false,
+            "vin_honneur": true,
+            "repas": true,
+            "soiree": true,
+            "brunch_lendemain": false
+          }
+        }
+      ]
+    }
+  ]
+}
