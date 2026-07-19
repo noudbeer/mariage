@@ -18,20 +18,6 @@ services:
       - ./data/guests.json:/app/data/guests.json:ro
       - ./data/temoins.json:/app/data/temoins.json:ro
       - ./data/rsvp.db:/app/data/rsvp.db
-    # networks:
-    #   - caddy
 
-# networks:
-#   caddy:
-#     external: true
-    # Réseau Docker partagé avec le conteneur Caddy déjà en place sur le NAS
-    # (le même réseau que celui utilisé pour Immich, par ex. `caddy` ou `proxy`
-    # selon la configuration existante — à adapter au nom réel).
-
-# --- Extrait Caddyfile à ajouter à la configuration Caddy existante sur le NAS ---
-#
-# mariage.mondomaine.fr {
-#     reverse_proxy mariage-web:3000
-# }
-#
-# Caddy gère automatiquement le certificat HTTPS (Let's Encrypt) pour ce sous-domaine.
+# Déploiement en prod (image GHCR + réseau Caddy partagé, sans build local) : voir le README
+# (section « CI/CD ») — le serveur garde son propre docker-compose.yml, distinct de celui-ci.
