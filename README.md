@@ -32,7 +32,7 @@ monté en volume).
 ## Déploiement
 
 ```bash
-cp .env.example .env   # renseigner SESSION_SECRET, ADMIN_USER, ADMIN_PASSWORD, WEDDING_DATE...
+cp .env.example .env   # renseigner SESSION_SECRET, ADMIN_EMAILS, WEDDING_DATE...
 # Créer data/guests.json (voir data/GUESTS_GUIDE.md) et data/temoins.json (voir data/temoins.example.json)
 touch data/rsvp.db && chmod 666 data/rsvp.db   # requis : le conteneur écrit avec un utilisateur non-root
 docker compose up -d --build
@@ -96,7 +96,7 @@ sudo -u deploy sh -c 'cat ~deploy/.ssh/id_ed25519.pub >> ~deploy/.ssh/authorized
 
 sudo -u deploy mkdir -p /srv/mariage/data
 cd /srv/mariage
-cp .env.example .env   # renseigner SESSION_SECRET, ADMIN_USER, ADMIN_PASSWORD, WEDDING_DATE...
+cp .env.example .env   # renseigner SESSION_SECRET, ADMIN_EMAILS, WEDDING_DATE...
 # Créer data/guests.json (voir data/GUESTS_GUIDE.md) et data/temoins.json (voir data/temoins.example.json)
 touch data/rsvp.db && chmod 666 data/rsvp.db
 ```

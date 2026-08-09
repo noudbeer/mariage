@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Programme, confirmation de présence et informations pratiques.",
     start_url: "/",
     display: "standalone",
-    background_color: "#fffaf7",
-    theme_color: "#e08a72",
+    background_color: "#fffaf5",
+    theme_color: "#d6336c",
     icons: [
       { src: "/icon/192", sizes: "192x192", type: "image/png" },
       { src: "/icon/512", sizes: "512x512", type: "image/png" },

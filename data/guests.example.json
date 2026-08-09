@@ -9,6 +9,7 @@
           "nom": "Dupont",
           "email": "jean.dupont@example.com",
           "invitations": {
+            "mairie": false,
             "ceremonie_religieuse": true,
             "vin_honneur": true,
             "repas": true,
@@ -22,6 +23,7 @@
           "nom": "Dupont",
           "email": "lea.dupont@example.com",
           "invitations": {
+            "mairie": false,
             "ceremonie_religieuse": true,
             "vin_honneur": true,
             "repas": true,
@@ -35,6 +37,7 @@
           "nom": "Dupont",
           "email": null,
           "invitations": {
+            "mairie": false,
             "ceremonie_religieuse": true,
             "vin_honneur": true,
             "repas": true,
@@ -53,6 +56,7 @@
           "nom": "Martin",
           "email": "claire.martin@example.com",
           "invitations": {
+            "mairie": false,
             "ceremonie_religieuse": false,
             "vin_honneur": true,
             "repas": true,

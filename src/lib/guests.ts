@@ -3,6 +3,7 @@ import { z } from "zod";
 import { config } from "./config";
 
 export const EVENT_KEYS = [
+  "mairie",
   "ceremonie_religieuse",
   "vin_honneur",
   "repas",
@@ -13,6 +14,7 @@ export const EVENT_KEYS = [
 export type EventKey = (typeof EVENT_KEYS)[number];
 
 const invitationsSchema = z.object({
+  mairie: z.boolean(),
   ceremonie_religieuse: z.boolean(),
   vin_honneur: z.boolean(),
   repas: z.boolean(),
@@ -60,11 +62,6 @@ function validateCrossReferences(data: GuestsFile): void {
         errors.push(`id de membre dupliqué : "${member.id}"`);
       }
       memberIds.add(member.id);
-
-      const hasAnyInvitation = EVENT_KEYS.some((key) => member.invitations[key]);
-      if (!hasAnyInvitation) {
-        errors.push(`le membre "${member.id}" n'a aucune invitation à true`);
-      }
 
       if (member.email) {
         householdHasEmail = true;

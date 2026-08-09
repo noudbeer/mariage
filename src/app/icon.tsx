@@ -21,7 +21,7 @@ export default function Icon({ id }: { id: string }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#e08a72",
+          background: "#d6336c",
           color: "white",
           fontSize: px * 0.42,
           fontFamily: "serif",

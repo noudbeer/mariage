@@ -5,8 +5,8 @@ import { config } from "@/lib/config";
 import WelcomeHero from "@/components/hero/WelcomeHero";
 import ScrollReveal from "@/components/hero/ScrollReveal";
 
-// Nom provisoire, à confirmer.
-const VENUE_NAME = "La Médicée";
+const VENUE_NAME = "La Grange à Jules";
+const VENUE_URL = "https://grangeajules.fr/";
 
 export default async function BienvenuePage() {
   const session = await getSession();
@@ -39,6 +39,14 @@ export default async function BienvenuePage() {
             Toutes les informations pratiques (adresse, accès) seront précisées sur le
             programme. Des photos du lieu seront ajoutées ici prochainement.
           </p>
+          <a
+            href={VENUE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 inline-block text-sm text-[var(--color-primary)] underline"
+          >
+            Voir le site de {VENUE_NAME}
+          </a>
         </ScrollReveal>
       </section>
     </main>

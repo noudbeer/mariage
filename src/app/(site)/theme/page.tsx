@@ -13,8 +13,9 @@ export default function ThemePage() {
     <main className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-2xl font-semibold">Palette du site</h1>
       <p className="mt-2 text-sm text-[var(--color-text-muted)]">
-        Pour changer la palette (corail ↔ vert d&apos;eau), il suffit d&apos;éditer les
-        variables dans <code>src/app/globals.css</code> — aucun composant à modifier.
+        Palette « full color » (fuchsia + terracotta). Pour l&apos;ajuster, il suffit
+        d&apos;éditer les variables dans <code>src/app/globals.css</code> — aucun composant à
+        modifier.
       </p>
 
       <section className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">

@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { getHouseholdById } from "@/lib/guests";
-import { EVENTS, EVENT_ORDER } from "@/lib/events";
+import { EVENTS, EVENT_ORDER, formatEventDate } from "@/lib/events";
 import ScrollReveal from "@/components/hero/ScrollReveal";
 
 export default async function ProgrammePage() {
@@ -37,7 +37,7 @@ export default async function ProgrammePage() {
                       <li key={key}>
                         <p className="font-medium text-[var(--color-primary)]">{event.label}</p>
                         <p className="text-sm text-[var(--color-text-muted)]">
-                          {event.heure} — {event.lieu}
+                          {formatEventDate(event.date)}, {event.heure} — {event.lieu}
                         </p>
                         <p className="text-sm">{event.description}</p>
                       </li>

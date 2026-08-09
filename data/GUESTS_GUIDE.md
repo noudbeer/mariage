@@ -17,6 +17,7 @@ données personnelles) — seul `guests.example.json` est versionné comme modè
           "nom": "Dupont",
           "email": "jean.dupont@example.com",
           "invitations": {
+            "mairie": false,
             "ceremonie_religieuse": true,
             "vin_honneur": true,
             "repas": true,
@@ -60,5 +61,7 @@ données personnelles) — seul `guests.example.json` est versionné comme modè
 Au démarrage, l'application vérifie le fichier et affiche une erreur claire si :
 - un `id` est dupliqué,
 - un email est mal formé ou utilisé par plusieurs membres,
-- un foyer n'a aucun membre avec email,
-- un membre n'a aucune invitation à `true`.
+- un foyer n'a aucun membre avec email.
+
+Un membre peut avoir toutes ses invitations à `false` (ex. invité pas encore confirmé) :
+il apparaît alors dans `/admin` mais n'est invité à aucun événement affiché côté invité.

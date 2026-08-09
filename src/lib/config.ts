@@ -13,12 +13,6 @@ export const config = {
   get sessionSecret() {
     return requireEnv("SESSION_SECRET");
   },
-  get adminUser() {
-    return process.env.ADMIN_USER ?? "";
-  },
-  get adminPassword() {
-    return process.env.ADMIN_PASSWORD ?? "";
-  },
   get weddingDate() {
     return process.env.WEDDING_DATE ?? "";
   },
@@ -58,7 +52,8 @@ export const config = {
   get contactEmail() {
     return process.env.CONTACT_EMAIL ?? "simon@bernoud.fr";
   },
-  // Emails des mariés : affiche les liens /admin et /theme dans le menu une fois connectés.
+  // Emails des mariés : une fois connectés (email + code reçu par mail) avec l'un de ces
+  // emails, ils ont accès à /admin et /theme (voir src/proxy.ts).
   get adminEmails() {
     return (process.env.ADMIN_EMAILS ?? "simon.bernoud@ikmail.com,tiffanyperrin74@gmail.com")
       .split(",")

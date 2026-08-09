@@ -1,21 +1,20 @@
 @import "tailwindcss";
 
 /*
- * Palette provisoire (corail pastel). Le choix définitif (corail vs vert d'eau)
- * se valide sur /theme : changer les valeurs ci-dessous suffit à re-thémer tout
- * le site, aucun composant à toucher.
+ * Palette "full color" (fuchsia + terracotta sur base ivoire). Se valide sur /theme :
+ * changer les valeurs ci-dessous suffit à re-thémer tout le site, aucun composant à toucher.
  */
 :root {
-  --background: #fffaf7;
-  --foreground: #3a2c28;
+  --background: #fffaf5;
+  --foreground: #2b1e22;
 
-  --color-primary: #e08a72;
-  --color-primary-soft: #f3c9bb;
-  --color-accent: #d8b48f;
-  --color-bg: #fffaf7;
+  --color-primary: #d6336c;
+  --color-primary-soft: #f5b8ce;
+  --color-accent: #e2723a;
+  --color-bg: #fffaf5;
   --color-surface: #ffffff;
-  --color-text: #3a2c28;
-  --color-text-muted: #8a7a74;
+  --color-text: #2b1e22;
+  --color-text-muted: #8c6e74;
 }
 
 @theme inline {

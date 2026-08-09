@@ -47,3 +47,4 @@ next-env.d.ts
 /data/rsvp.db-journal
 /data/rsvp.db-wal
 /data/rsvp.db-shm
+/data/*.csv

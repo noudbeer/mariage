@@ -1,42 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { config as appConfig } from "@/lib/config";
+import { getHouseholdById } from "@/lib/guests";
 import type { SessionData } from "@/lib/session";
 
 const GUEST_PROTECTED_PREFIXES = ["/bienvenue", "/programme", "/rsvp", "/galerie", "/temoins"];
-const BASIC_AUTH_PREFIXES = ["/theme", "/admin"];
+const ADMIN_PREFIXES = ["/theme", "/admin"];
 
-function unauthorizedBasicAuth() {
-  return new NextResponse("Authentification requise.", {
-    status: 401,
-    headers: { "WWW-Authenticate": 'Basic realm="Espace interne"' },
-  });
-}
-
-function hasValidBasicAuth(request: NextRequest): boolean {
-  const header = request.headers.get("authorization");
-  if (!header?.startsWith("Basic ")) return false;
-
-  const decoded = atob(header.slice("Basic ".length));
-  const separatorIndex = decoded.indexOf(":");
-  if (separatorIndex === -1) return false;
-
-  const user = decoded.slice(0, separatorIndex);
-  const password = decoded.slice(separatorIndex + 1);
-  return user === appConfig.adminUser && password === appConfig.adminPassword;
+function isAdminSession(session: SessionData): boolean {
+  if (!session.householdId || !session.memberId) return false;
+  const member = getHouseholdById(session.householdId)?.membres.find(
+    (m) => m.id === session.memberId,
+  );
+  if (!member?.email) return false;
+  return appConfig.adminEmails.includes(member.email.trim().toLowerCase());
 }
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (BASIC_AUTH_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
-    return hasValidBasicAuth(request) ? NextResponse.next() : unauthorizedBasicAuth();
-  }
-
+  const isAdminRoute = ADMIN_PREFIXES.some((prefix) => pathname.startsWith(prefix));
   const isGuestProtected = GUEST_PROTECTED_PREFIXES.some((prefix) =>
     pathname.startsWith(prefix),
   );
-  if (!isGuestProtected) {
+  if (!isAdminRoute && !isGuestProtected) {
     return NextResponse.next();
   }
 
@@ -48,6 +35,10 @@ export async function proxy(request: NextRequest) {
 
   if (!session.householdId) {
     return NextResponse.redirect(new URL("/connexion", request.url));
+  }
+
+  if (isAdminRoute && !isAdminSession(session)) {
+    return NextResponse.redirect(new URL("/bienvenue", request.url));
   }
 
   return response;
