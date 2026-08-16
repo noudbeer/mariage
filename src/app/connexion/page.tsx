@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 export default function ConnexionPage() {
@@ -11,6 +11,40 @@ export default function ConnexionPage() {
   const [website, setWebsite] = useState(""); // honeypot
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Lien "Remplir le code automatiquement" depuis l'email : pré-remplit le code
+  // et le copie dans le presse-papier, mais ne connecte pas automatiquement —
+  // il faut toujours confirmer avec le bouton "Se connecter".
+  // Doit rester dans un effet (pas un lazy initializer) : window.location n'existe qu'au
+  // client, un rendu initial différent du SSR provoquerait un mismatch d'hydratation.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const linkCode = params.get("code");
+    const linkEmail = params.get("email");
+    if (!linkCode || !/^\d{6}$/.test(linkCode)) return;
+
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setEmail(linkEmail ?? "");
+    setCode(linkCode);
+    setStep("code");
+    navigator.clipboard?.writeText(linkCode).catch(() => {});
+    window.history.replaceState({}, "", "/connexion");
+  }, []);
+
+  async function handlePasteCode() {
+    try {
+      const text = await navigator.clipboard.readText();
+      const digits = text.replace(/\D/g, "").slice(0, 6);
+      if (!digits) {
+        setError("Le presse-papier ne contient pas de code valide.");
+        return;
+      }
+      setCode(digits);
+      setError(null);
+    } catch {
+      setError("Impossible d'accéder au presse-papier. Collez le code manuellement.");
+    }
+  }
 
   async function handleRequestOtp(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -92,10 +126,13 @@ export default function ConnexionPage() {
             />
           </label>
 
-          {/* Honeypot anti-bot : caché visuellement, invisible pour un humain */}
+          {/* Honeypot anti-bot : caché visuellement, invisible pour un humain.
+              Nom volontairement générique — "website"/"url" est reconnu par
+              certains autofills de navigateur, qui le remplissent même caché
+              et font échouer la connexion d'un humain légitime. */}
           <input
             type="text"
-            name="website"
+            name="hp"
             value={website}
             onChange={(e) => setWebsite(e.target.value)}
             tabIndex={-1}
@@ -131,6 +168,14 @@ export default function ConnexionPage() {
               className="rounded-md border border-black/10 px-3 py-2 text-center text-lg tracking-[0.3em] outline-none focus:ring-2 focus:ring-[var(--color-primary)]"
             />
           </label>
+
+          <button
+            type="button"
+            onClick={handlePasteCode}
+            className="rounded-md border border-black/10 px-4 py-2 text-sm font-medium transition hover:bg-black/5"
+          >
+            Coller le code
+          </button>
 
           {error && <p className="text-sm text-red-600">{error}</p>}
 

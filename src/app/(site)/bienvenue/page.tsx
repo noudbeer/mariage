@@ -4,6 +4,7 @@ import { getHouseholdById } from "@/lib/guests";
 import { config } from "@/lib/config";
 import WelcomeHero from "@/components/hero/WelcomeHero";
 import ScrollReveal from "@/components/hero/ScrollReveal";
+import CouplePhotos from "@/components/home/CouplePhotos";
 
 const VENUE_NAME = "La Grange à Jules";
 const VENUE_URL = "https://grangeajules.fr/";
@@ -49,6 +50,15 @@ export default async function BienvenuePage() {
           </a>
         </ScrollReveal>
       </section>
+
+      <ScrollReveal className="mx-auto max-w-5xl px-6 pb-20">
+        <h2 className="text-center text-lg font-medium text-[var(--color-primary)]">
+          Nous en photos
+        </h2>
+        <div className="mt-8">
+          <CouplePhotos />
+        </div>
+      </ScrollReveal>
     </main>
   );
 }

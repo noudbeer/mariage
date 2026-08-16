@@ -18,6 +18,7 @@ services:
       - ./data/guests.json:/app/data/guests.json:ro
       - ./data/temoins.json:/app/data/temoins.json:ro
       - ./data/rsvp.db:/app/data/rsvp.db
+      - ./public/photos:/app/public/photos:ro
 
 # Déploiement en prod (image GHCR + réseau Caddy partagé, sans build local) : voir le README
 # (section « CI/CD ») — le serveur garde son propre docker-compose.yml, distinct de celui-ci.

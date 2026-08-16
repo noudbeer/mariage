@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server";
 
 const WINDOW_MS = 10 * 60 * 1000;
-const MAX_ATTEMPTS = 5;
+const MAX_ATTEMPTS = 10;
 
 // Compteur en mémoire par IP : ne fonctionne correctement qu'avec une seule instance
 // du conteneur (voir docker-compose.yml, replicas: 1).

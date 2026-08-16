@@ -19,6 +19,12 @@ export const config = {
   get immichShareUrl() {
     return process.env.IMMICH_SHARE_URL ?? "";
   },
+  // Clé du lien de partage Immich (visible dans l'URL des vignettes de la page publique,
+  // ex. ?key=...) — permet d'appeler l'API Immich pour afficher les dernières photos
+  // directement sur /galerie. Laisser vide pour se contenter du lien/bouton vers Immich.
+  get immichShareKey() {
+    return process.env.IMMICH_SHARE_KEY ?? "";
+  },
   get guestsJsonPath() {
     return process.env.GUESTS_JSON_PATH ?? "./data/guests.json";
   },

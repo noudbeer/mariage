@@ -45,9 +45,10 @@ export async function POST(request: NextRequest) {
   }
 
   const code = createOtp(email, found.household.id, found.member.id);
+  const fillLink = `${request.nextUrl.origin}/connexion?email=${encodeURIComponent(email)}&code=${code}`;
 
   try {
-    await sendOtpEmail({ to: email, code });
+    await sendOtpEmail({ to: email, code, fillLink });
   } catch (err) {
     console.error("Échec envoi email OTP :", err);
     return NextResponse.json(

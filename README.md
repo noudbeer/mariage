@@ -94,7 +94,7 @@ sudo -u deploy ssh-keygen -t ed25519 -C gha-deploy -f ~deploy/.ssh/id_ed25519 -N
 sudo -u deploy sh -c 'cat ~deploy/.ssh/id_ed25519.pub >> ~deploy/.ssh/authorized_keys'
 # → coller le contenu de ~deploy/.ssh/id_ed25519 dans le secret GitHub SSH_PRIVATE_KEY
 
-sudo -u deploy mkdir -p /srv/mariage/data
+sudo -u deploy mkdir -p /srv/mariage/data /srv/mariage/public/photos
 cd /srv/mariage
 cp .env.example .env   # renseigner SESSION_SECRET, ADMIN_EMAILS, WEDDING_DATE...
 # Créer data/guests.json (voir data/GUESTS_GUIDE.md) et data/temoins.json (voir data/temoins.example.json)
@@ -116,6 +116,7 @@ services:
       - ./data/guests.json:/app/data/guests.json:ro
       - ./data/temoins.json:/app/data/temoins.json:ro
       - ./data/rsvp.db:/app/data/rsvp.db
+      - ./public/photos:/app/public/photos:ro
     networks:
       - reverseProxy
 

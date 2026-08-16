@@ -48,3 +48,7 @@ next-env.d.ts
 /data/rsvp.db-wal
 /data/rsvp.db-shm
 /data/*.csv
+
+# photos perso du couple : dépôt public, jamais versionnées (transférées à la main sur le
+# serveur, voir README « CI/CD »)
+/public/photos
