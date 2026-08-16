@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { config } from "@/lib/config";
 import { findMemberByEmail } from "@/lib/guests";
 import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 import { createOtp } from "@/lib/otp";
@@ -45,7 +46,8 @@ export async function POST(request: NextRequest) {
   }
 
   const code = createOtp(email, found.household.id, found.member.id);
-  const fillLink = `${request.nextUrl.origin}/connexion?email=${encodeURIComponent(email)}&code=${code}`;
+  const origin = config.siteUrl || request.nextUrl.origin;
+  const fillLink = `${origin}/connexion?email=${encodeURIComponent(email)}&code=${code}`;
 
   try {
     await sendOtpEmail({ to: email, code, fillLink });

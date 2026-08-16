@@ -16,6 +16,14 @@ export const config = {
   get weddingDate() {
     return process.env.WEDDING_DATE ?? "";
   },
+  // URL publique du site (ex. https://mariage.bernoud.fr), utilisée pour construire des liens
+  // absolus dans les emails (bouton de connexion). Derrière le reverse-proxy Caddy (pas de port
+  // publié sur l'hôte), `request.nextUrl.origin` ne reflète pas l'hôte public — il faut donc
+  // configurer cette valeur explicitement en prod. Vide en dev : on retombe sur l'origine de la
+  // requête (localhost ou IP du réseau local selon comment le site est ouvert).
+  get siteUrl() {
+    return (process.env.SITE_URL ?? "").replace(/\/$/, "");
+  },
   get immichShareUrl() {
     return process.env.IMMICH_SHARE_URL ?? "";
   },
