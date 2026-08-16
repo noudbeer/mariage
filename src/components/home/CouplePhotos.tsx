@@ -26,15 +26,22 @@ const PHOTOS = [
 
 export default function CouplePhotos() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [failed, setFailed] = useState<Set<string>>(new Set());
+
+  const photos = PHOTOS.filter((p) => !failed.has(p.file));
+
+  const markFailed = useCallback((file: string) => {
+    setFailed((prev) => (prev.has(file) ? prev : new Set(prev).add(file)));
+  }, []);
 
   const close = useCallback(() => setOpenIndex(null), []);
   const prev = useCallback(
-    () => setOpenIndex((i) => (i === null ? null : (i - 1 + PHOTOS.length) % PHOTOS.length)),
-    [],
+    () => setOpenIndex((i) => (i === null ? null : (i - 1 + photos.length) % photos.length)),
+    [photos.length],
   );
   const next = useCallback(
-    () => setOpenIndex((i) => (i === null ? null : (i + 1) % PHOTOS.length)),
-    [],
+    () => setOpenIndex((i) => (i === null ? null : (i + 1) % photos.length)),
+    [photos.length],
   );
 
   useEffect(() => {
@@ -48,12 +55,14 @@ export default function CouplePhotos() {
     return () => window.removeEventListener("keydown", onKey);
   }, [openIndex, close, prev, next]);
 
-  const current = openIndex !== null ? PHOTOS[openIndex] : null;
+  const current = openIndex !== null ? photos[openIndex] : null;
+
+  if (photos.length === 0) return null;
 
   return (
     <>
       <div className="columns-2 gap-2 sm:columns-3 md:columns-4">
-        {PHOTOS.map((photo, i) => (
+        {photos.map((photo, i) => (
           <button
             key={photo.file}
             type="button"
@@ -68,6 +77,7 @@ export default function CouplePhotos() {
               height={photo.height}
               sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
               priority={i === 0}
+              onError={() => markFailed(photo.file)}
               className="h-auto w-full object-cover transition duration-300 hover:scale-105"
             />
           </button>
@@ -118,6 +128,10 @@ export default function CouplePhotos() {
                 alt=""
                 width={current.width}
                 height={current.height}
+                onError={() => {
+                  markFailed(current.file);
+                  close();
+                }}
                 className="max-h-[85vh] w-auto max-w-full rounded-lg object-contain"
               />
             </div>

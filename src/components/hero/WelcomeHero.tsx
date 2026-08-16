@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 interface Props {
   firstName: string;
@@ -12,6 +12,7 @@ interface Props {
 
 export default function WelcomeHero({ firstName, venueName, dateLabel }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const [photoFailed, setPhotoFailed] = useState(false);
   const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
@@ -61,17 +62,23 @@ export default function WelcomeHero({ firstName, venueName, dateLabel }: Props) 
           className="relative aspect-[4/5] w-full max-w-[380px] overflow-hidden rounded-[2rem] shadow-xl"
         >
           <div className="relative flex h-full w-full items-center justify-center bg-gradient-to-br from-[var(--color-primary-soft)] via-[var(--color-accent)] to-[var(--color-primary)]">
-            {/* <span className="font-script text-6xl text-white/90">T &amp; S</span> */}
-            <Image
-              src="/photos/Screenshot_20260622-193234~2.jpg"
-              alt="Tiffany et Simon"
-              fill
-              priority
-              sizes="380px"
-              className="object-cover transition duration-300 hover:scale-105"
-              style={{ filter: "saturate(0.85) sepia(0.12) contrast(1.05)" }}
-            />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/25 via-transparent to-[var(--color-accent)]/25 mix-blend-multiply" />
+            {photoFailed ? (
+              <span className="font-script text-6xl text-white/90">T &amp; S</span>
+            ) : (
+              <>
+                <Image
+                  src="/photos/Screenshot_20260622-193234~2.jpg"
+                  alt="Tiffany et Simon"
+                  fill
+                  priority
+                  sizes="380px"
+                  onError={() => setPhotoFailed(true)}
+                  className="object-cover transition duration-300 hover:scale-105"
+                  style={{ filter: "saturate(0.85) sepia(0.12) contrast(1.05)" }}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/25 via-transparent to-[var(--color-accent)]/25 mix-blend-multiply" />
+              </>
+            )}
           </div>
         </motion.div>
 
