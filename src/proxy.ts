@@ -4,7 +4,14 @@ import { config as appConfig } from "@/lib/config";
 import { getHouseholdById } from "@/lib/guests";
 import type { SessionData } from "@/lib/session";
 
-const GUEST_PROTECTED_PREFIXES = ["/bienvenue", "/programme", "/rsvp", "/galerie", "/temoins"];
+const GUEST_PROTECTED_PREFIXES = [
+  "/bienvenue",
+  "/programme",
+  "/rsvp",
+  "/galerie",
+  "/temoins",
+  "/reservation-gite",
+];
 const ADMIN_PREFIXES = ["/theme", "/admin"];
 
 function isAdminSession(session: SessionData): boolean {
@@ -51,6 +58,7 @@ export const config = {
     "/rsvp/:path*",
     "/galerie/:path*",
     "/temoins/:path*",
+    "/reservation-gite/:path*",
     "/theme/:path*",
     "/admin/:path*",
   ],

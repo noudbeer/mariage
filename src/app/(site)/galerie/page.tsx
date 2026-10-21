@@ -21,8 +21,9 @@ export default async function GaleriePage() {
 
           {!isPastWedding && (
             <p className="mt-4 text-[var(--color-text-muted)]">
-              Cette page s&apos;ouvrira automatiquement après le mariage, une fois les
-              photos disponibles. Revenez après la fête !
+              Cette page s&apos;ouvrira automatiquement le jour du mariage : vous pourrez
+              alors déposer vos photos et vidéos dès la cérémonie et pendant toute la
+              soirée !
             </p>
           )}
 

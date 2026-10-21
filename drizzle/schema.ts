@@ -14,6 +14,16 @@ export const rsvpResponses = sqliteTable(
   (table) => [uniqueIndex("rsvp_responses_member_event_idx").on(table.memberId, table.eventKey)],
 );
 
+export const giteRequests = sqliteTable("gite_requests", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  householdId: text("household_id").notNull(),
+  submittedByMemberId: text("submitted_by_member_id").notNull(),
+  memberIds: text("member_ids").notNull(),
+  nombrePersonnes: integer("nombre_personnes").notNull(),
+  nombreNuits: integer("nombre_nuits").notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
 export const loginAudit = sqliteTable("login_audit", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   ip: text("ip").notNull(),

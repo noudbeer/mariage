@@ -24,26 +24,48 @@ export default async function ProgrammePage() {
           const invitedEvents = EVENT_ORDER.filter((key) => member.invitations[key]);
           if (invitedEvents.length === 0) return null;
 
+          const days = new Map<string, (typeof invitedEvents)[number][]>();
+          for (const key of invitedEvents) {
+            const date = EVENTS[key].date;
+            const existing = days.get(date);
+            if (existing) {
+              existing.push(key);
+            } else {
+              days.set(date, [key]);
+            }
+          }
+
           return (
             <ScrollReveal key={member.id}>
               <section>
                 <h2 className="mb-3 text-lg font-medium">
                   {member.prenom} {member.nom}
                 </h2>
-                <ol className="flex flex-col gap-4 border-l-2 border-[var(--color-primary-soft)] pl-4">
-                  {invitedEvents.map((key) => {
-                    const event = EVENTS[key];
-                    return (
-                      <li key={key}>
-                        <p className="font-medium text-[var(--color-primary)]">{event.label}</p>
-                        <p className="text-sm text-[var(--color-text-muted)]">
-                          {formatEventDate(event.date)}, {event.heure} — {event.lieu}
-                        </p>
-                        <p className="text-sm">{event.description}</p>
-                      </li>
-                    );
-                  })}
-                </ol>
+                <div className="flex flex-col gap-6">
+                  {[...days.entries()].map(([date, keys]) => (
+                    <div key={date}>
+                      <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--color-primary)]">
+                        {formatEventDate(date)}
+                      </h3>
+                      <ol className="flex flex-col gap-4 border-l-2 border-[var(--color-primary-soft)] pl-4">
+                        {keys.map((key) => {
+                          const event = EVENTS[key];
+                          return (
+                            <li key={key}>
+                              <p className="font-medium text-[var(--color-primary)]">
+                                {event.label}
+                              </p>
+                              <p className="text-sm text-[var(--color-text-muted)]">
+                                {event.heure} — {event.lieu}
+                              </p>
+                              <p className="text-sm">{event.description}</p>
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    </div>
+                  ))}
+                </div>
               </section>
             </ScrollReveal>
           );
@@ -55,6 +77,23 @@ export default async function ProgrammePage() {
           Confirmer votre présence
         </a>
       </p>
+
+      <ScrollReveal>
+        <div className="mt-10 rounded-lg border border-[var(--color-primary-soft)] bg-[var(--color-primary-soft)]/10 p-5 text-center">
+          <h2 className="mb-2 font-medium">Un gîte sur place</h2>
+          <p className="text-sm text-[var(--color-text-muted)]">
+            Nous avons loué un gîte pour 36 personnes sur le lieu du mariage, du lundi au
+            jeudi midi, pour 30€ par personne. Piscine, terrain de pétanque, grande terrasse
+            et barbecue sur place !
+          </p>
+          <a
+            href="/reservation-gite"
+            className="mt-4 inline-block rounded-full bg-[var(--color-primary)] px-6 py-2 text-sm font-medium text-white"
+          >
+            Faire une demande de réservation
+          </a>
+        </div>
+      </ScrollReveal>
     </main>
   );
 }
