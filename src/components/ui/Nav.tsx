@@ -39,15 +39,13 @@ export default async function Nav() {
               <a href="/temoins" className="font-medium transition-colors hover:text-[var(--color-primary)]">
                 Témoins
               </a>
+              <a href="/theme" className="font-medium transition-colors hover:text-[var(--color-primary)]">
+                Thème
+              </a>
               {isAdmin && (
-                <>
-                  <a href="/admin" className="font-medium transition-colors hover:text-[var(--color-primary)]">
-                    Suivi RSVP
-                  </a>
-                  <a href="/theme" className="font-medium transition-colors hover:text-[var(--color-primary)]">
-                    Thème
-                  </a>
-                </>
+                <a href="/admin" className="font-medium transition-colors hover:text-[var(--color-primary)]">
+                  Suivi RSVP
+                </a>
               )}
               <LogoutButton />
             </>

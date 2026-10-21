@@ -4,7 +4,7 @@ import ScrollReveal from "@/components/hero/ScrollReveal";
 const HIGHLIGHTS = [
   {
     title: "Le programme",
-    text: "Cérémonie, vin d'honneur, repas, soirée, brunch du lendemain — chacun voit ce à quoi il est convié.",
+    text: "Cérémonie, vin d'honneur, repas, soirée, brunch du lendemain.",
   },
   {
     title: "Confirmez votre présence",

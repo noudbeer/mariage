@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import localFont from "next/font/local";
+import { Geist, Geist_Mono, Great_Vibes } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -13,10 +12,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Police manuscrite pour le prénom des mariés (page de connexion, menu).
-const alexBrush = localFont({
-  src: "../fonts/AlexBrush-Regular.ttf",
+// Police manuscrite pour le prénom des mariés (page d'accueil, menu).
+const greatVibes = Great_Vibes({
   variable: "--font-script",
+  weight: "400",
+  subsets: ["latin"],
   display: "swap",
 });
 
@@ -43,7 +43,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${geistSans.variable} ${geistMono.variable} ${alexBrush.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${greatVibes.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

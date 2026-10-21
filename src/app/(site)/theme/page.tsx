@@ -1,59 +1,27 @@
-const SWATCHES = [
-  { name: "--color-primary", label: "Primaire" },
-  { name: "--color-primary-soft", label: "Primaire (doux)" },
-  { name: "--color-accent", label: "Accent" },
-  { name: "--color-bg", label: "Fond" },
-  { name: "--color-surface", label: "Surface" },
-  { name: "--color-text", label: "Texte" },
-  { name: "--color-text-muted", label: "Texte atténué" },
-];
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/session";
+import ColorCloud from "@/components/theme/ColorCloud";
 
-export default function ThemePage() {
+export default async function ThemePage() {
+  const session = await getSession();
+  if (!session.householdId) {
+    redirect("/connexion");
+  }
+
   return (
-    <main className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl font-semibold">Palette du site</h1>
-      <p className="mt-2 text-sm text-[var(--color-text-muted)]">
-        Palette « full color » (fuchsia + terracotta). Pour l&apos;ajuster, il suffit
-        d&apos;éditer les variables dans <code>src/app/globals.css</code> — aucun composant à
-        modifier.
-      </p>
+    <main className="relative h-[calc(100dvh-4rem)] w-full overflow-hidden">
+      <ColorCloud />
 
-      <section className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {SWATCHES.map((swatch) => (
-          <div key={swatch.name} className="flex flex-col gap-2">
-            <div
-              className="h-20 rounded-lg border border-black/10"
-              style={{ background: `var(${swatch.name})` }}
-            />
-            <p className="text-xs text-[var(--color-text-muted)]">{swatch.label}</p>
-          </div>
-        ))}
-      </section>
-
-      <section className="mt-14 flex flex-col gap-6">
-        <h2 className="text-lg font-medium">Aperçu sur des composants réels</h2>
-
-        <div className="flex flex-wrap items-center gap-4">
-          <button className="rounded-md bg-[var(--color-primary)] px-4 py-2 font-medium text-white">
-            Bouton principal
-          </button>
-          <button className="rounded-md border border-[var(--color-primary)] px-4 py-2 font-medium text-[var(--color-primary)]">
-            Bouton secondaire
-          </button>
-          <a href="#" className="text-[var(--color-primary)] underline">
-            Un lien
-          </a>
-        </div>
-
-        <div className="rounded-lg border border-black/10 bg-[var(--color-surface)] p-6">
-          <p className="text-sm text-[var(--color-primary)]">Vin d&apos;honneur</p>
-          <h3 className="text-xl font-semibold">Titre de section</h3>
-          <p className="mt-2 text-sm text-[var(--color-text-muted)]">
-            Texte de paragraphe d&apos;exemple pour visualiser le contraste et la lisibilité
-            de la palette sur une carte.
+      <div className="pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center">
+        <div className="flex flex-col items-center gap-3 rounded-2xl bg-[var(--color-bg)]/70 px-6 py-4 backdrop-blur-[2px] sm:backdrop-blur-sm">
+          <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-primary)]">
+            Votre tenue pour le jour J
           </p>
+          <h1 className="max-w-xl font-script text-4xl sm:text-6xl">
+            Une journée en couleur pour ce jour si précieux
+          </h1>
         </div>
-      </section>
+      </div>
     </main>
   );
 }
