@@ -25,8 +25,13 @@ export default async function ReservationGitePage() {
       <h1 className="mb-6 text-2xl font-semibold">Réservation du gîte</h1>
 
       <p className="mb-10 text-sm text-[var(--color-text-muted)]">
-        Le gîte est loué sur le lieu du mariage, du lundi au jeudi midi, pour 30€ par
-        personne. Piscine, terrain de pétanque, grande terrasse et barbecue sur place.
+        Nous avons loué un gîte sur le lieu du mariage, du lundi au jeudi midi, pour profiter
+        encore un peu de vous après la fête. Piscine, terrain de pétanque, grande terrasse et
+        barbecue vous y attendent.
+        <br />
+        <br />
+        Le prix est fixé à 30€ par nuit et par personne. Si l&apos;aventure vous tente,
+        laissez-nous une demande ci-dessous.
       </p>
 
       <ScrollReveal>

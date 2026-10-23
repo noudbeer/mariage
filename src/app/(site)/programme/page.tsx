@@ -17,9 +17,11 @@ export default async function ProgrammePage() {
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="mb-10 text-2xl font-semibold">Le programme</h1>
+      <div className="sm:px-30">
+        <h1 className="mb-10 text-2xl font-semibold">Le programme</h1>
+      </div>
 
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col divide-y-1 divide-[var(--color-primary)]">
         {household.membres.map((member) => {
           const invitedEvents = EVENT_ORDER.filter((key) => member.invitations[key]);
           if (invitedEvents.length === 0) return null;
@@ -36,8 +38,8 @@ export default async function ProgrammePage() {
           }
 
           return (
-            <ScrollReveal key={member.id}>
-              <section>
+            <ScrollReveal key={member.id} className="py-10 first:pt-0 last:pb-0">
+              <section className="sm:px-30">
                 <h2 className="mb-3 text-lg font-medium">
                   {member.prenom} {member.nom}
                 </h2>
@@ -72,18 +74,18 @@ export default async function ProgrammePage() {
         })}
       </div>
 
-      <p className="mt-12 text-center text-sm">
+      <p className="mt-12 text-center text-sm sm:px-30">
         <a href="/rsvp" className="underline">
           Confirmer votre présence
         </a>
       </p>
 
       <ScrollReveal>
-        <div className="mt-10 rounded-lg border border-[var(--color-primary-soft)] bg-[var(--color-primary-soft)]/10 p-5 text-center">
+        <div className="mt-10 rounded-lg border border-[var(--color-primary-soft)] bg-[var(--color-primary-soft)]/10 p-6 text-center">
           <h2 className="mb-2 font-medium">Un gîte sur place</h2>
           <p className="text-sm text-[var(--color-text-muted)]">
             Nous avons loué un gîte pour 36 personnes sur le lieu du mariage, du lundi au
-            jeudi midi, pour 30€ par personne. Piscine, terrain de pétanque, grande terrasse
+            jeudi midi, pour 30€ par nuit et par personne. Piscine, terrain de pétanque, grande terrasse
             et barbecue sur place !
           </p>
           <a
