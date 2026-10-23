@@ -14,7 +14,7 @@ export default function LogoutButton() {
   return (
     <button
       onClick={handleLogout}
-      className="text-sm text-[var(--color-text-muted)] underline"
+      className="cursor-pointer text-sm text-[var(--color-text-muted)] underline transition-colors hover:text-[var(--color-primary)]"
     >
       Se déconnecter
     </button>

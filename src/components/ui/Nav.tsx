@@ -28,14 +28,14 @@ export default async function Nav() {
       <a href="/rsvp" className="font-medium transition-colors hover:text-[var(--color-primary)]">
         Ma présence
       </a>
-      <a href="/galerie" className="font-medium transition-colors hover:text-[var(--color-primary)]">
-        Photos
+      <a href="/theme" className="font-medium transition-colors hover:text-[var(--color-primary)]">
+        Thème
       </a>
       <a href="/temoins" className="font-medium transition-colors hover:text-[var(--color-primary)]">
         Témoins
       </a>
-      <a href="/theme" className="font-medium transition-colors hover:text-[var(--color-primary)]">
-        Thème
+      <a href="/galerie" className="font-medium transition-colors hover:text-[var(--color-primary)]">
+        Photos
       </a>
       {isAdmin && (
         <a href="/admin" className="font-medium transition-colors hover:text-[var(--color-primary)]">

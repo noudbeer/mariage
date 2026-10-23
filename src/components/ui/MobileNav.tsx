@@ -16,7 +16,7 @@ export default function MobileNav({ links, actions }: Props) {
         {links}
       </div>
 
-      <div className="relative col-start-3 flex items-center justify-end gap-5">
+      <div className="relative col-start-3 flex items-center justify-end justify-self-end gap-5">
         <div className="hidden items-center gap-5 md:flex">{actions}</div>
 
         <button
