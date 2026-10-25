@@ -21,6 +21,8 @@ export const giteRequests = sqliteTable("gite_requests", {
   memberIds: text("member_ids").notNull(),
   nombrePersonnes: integer("nombre_personnes").notNull(),
   nombreNuits: integer("nombre_nuits").notNull(),
+  // JSON { memberId: nuits } ; null pour les demandes faites avant le choix par personne
+  nuitsParMembre: text("nuits_par_membre"),
   createdAt: text("created_at").notNull(),
 });
 

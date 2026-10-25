@@ -1,0 +1,1 @@
+ALTER TABLE `gite_requests` ADD `nuits_par_membre` text;

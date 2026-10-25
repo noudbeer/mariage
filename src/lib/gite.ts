@@ -9,6 +9,7 @@ export interface GiteRequest {
   memberIds: string[];
   nombrePersonnes: number;
   nombreNuits: number;
+  nuitsParMembre: Record<string, number> | null;
   createdAt: string;
 }
 
@@ -26,6 +27,9 @@ export function getHouseholdGiteRequests(householdId: string): GiteRequest[] {
       memberIds: JSON.parse(row.memberIds) as string[],
       nombrePersonnes: row.nombrePersonnes,
       nombreNuits: row.nombreNuits,
+      nuitsParMembre: row.nuitsParMembre
+        ? (JSON.parse(row.nuitsParMembre) as Record<string, number>)
+        : null,
       createdAt: row.createdAt,
     }))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
@@ -36,9 +40,9 @@ export class InvalidGiteRequestError extends Error {}
 export function createGiteRequest(
   household: Household,
   submittedByMemberId: string,
-  memberIds: string[],
-  nombreNuits: number,
+  nuitsParMembre: Record<string, number>,
 ): void {
+  const memberIds = Object.keys(nuitsParMembre);
   const householdMemberIds = new Set(household.membres.map((m) => m.id));
   if (!householdMemberIds.has(submittedByMemberId)) {
     throw new InvalidGiteRequestError("Membre inconnu dans ce foyer.");
@@ -46,7 +50,8 @@ export function createGiteRequest(
   if (!memberIds.every((id) => householdMemberIds.has(id))) {
     throw new InvalidGiteRequestError("Un des membres sélectionnés n'appartient pas à ce foyer.");
   }
-  if (nombreNuits < 1 || nombreNuits > 3) {
+  const nuits = Object.values(nuitsParMembre);
+  if (!nuits.every((n) => Number.isInteger(n) && n >= 1 && n <= 3)) {
     throw new InvalidGiteRequestError("Nombre de nuits invalide.");
   }
 
@@ -57,7 +62,9 @@ export function createGiteRequest(
       submittedByMemberId,
       memberIds: JSON.stringify(memberIds),
       nombrePersonnes: memberIds.length,
-      nombreNuits,
+      // durée du séjour la plus longue ; le détail par personne est dans nuitsParMembre
+      nombreNuits: nuits.length > 0 ? Math.max(...nuits) : 0,
+      nuitsParMembre: JSON.stringify(nuitsParMembre),
       createdAt: new Date().toISOString(),
     })
     .run();

@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { config } from "./config";
+import { PRIX_NUIT_PAR_PERSONNE } from "./giteTarif";
 
 let transporter: ReturnType<typeof nodemailer.createTransport> | null = null;
 
@@ -34,17 +35,20 @@ export async function sendContactEmail(params: {
 
 export async function sendGiteRequestEmail(params: {
   householdId: string;
-  noms: string[];
-  nombrePersonnes: number;
-  nombreNuits: number;
+  personnes: { nom: string; nuits: number }[];
 }): Promise<void> {
-  const { householdId, noms, nombrePersonnes, nombreNuits } = params;
+  const { householdId, personnes } = params;
+  const detail =
+    personnes.map((p) => `  - ${p.nom} : ${p.nuits} nuit${p.nuits > 1 ? "s" : ""}`).join("\n") ||
+    "  (aucune sélectionnée)";
+  const totalNuitees = personnes.reduce((sum, p) => sum + p.nuits, 0);
+  const totalEuros = totalNuitees * PRIX_NUIT_PAR_PERSONNE;
 
   await getTransporter().sendMail({
     from: config.smtpFrom,
     to: config.contactEmail,
     subject: `[Site mariage] Demande de gîte — foyer ${householdId}`,
-    text: `Nouvelle demande de réservation du gîte :\n\nFoyer : ${householdId}\nPersonnes concernées : ${noms.join(", ") || "(aucune sélectionnée)"}\nNombre de personnes : ${nombrePersonnes}\nNombre de nuits : ${nombreNuits}\n\nCeci est une simple demande, à recontacter pour validation.`,
+    text: `Nouvelle demande de réservation du gîte :\n\nFoyer : ${householdId}\nPersonnes concernées :\n${detail}\nNombre de personnes : ${personnes.length}\nTotal nuitées : ${totalNuitees}\nEstimation : ${totalEuros} € (${PRIX_NUIT_PAR_PERSONNE} € par nuit et par personne, en espèces)\n\nCeci est une simple demande, à recontacter pour validation.`,
   });
 }
 

@@ -6,8 +6,7 @@ import { createGiteRequest, InvalidGiteRequestError } from "@/lib/gite";
 import { sendGiteRequestEmail } from "@/lib/mailer";
 
 const bodySchema = z.object({
-  memberIds: z.array(z.string().min(1)).default([]),
-  nombreNuits: z.number().int().min(1).max(3),
+  nuitsParMembre: z.record(z.string().min(1), z.number().int().min(1).max(3)).default({}),
 });
 
 export async function POST(request: NextRequest) {
@@ -27,10 +26,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Requête invalide." }, { status: 400 });
   }
 
-  const { memberIds, nombreNuits } = parsed.data;
+  const { nuitsParMembre } = parsed.data;
 
   try {
-    createGiteRequest(household, session.memberId, memberIds, nombreNuits);
+    createGiteRequest(household, session.memberId, nuitsParMembre);
   } catch (err) {
     if (err instanceof InvalidGiteRequestError) {
       return NextResponse.json({ error: err.message }, { status: 400 });
@@ -38,15 +37,13 @@ export async function POST(request: NextRequest) {
     throw err;
   }
 
-  const noms = household.membres
-    .filter((m) => memberIds.includes(m.id))
-    .map((m) => `${m.prenom} ${m.nom}`);
+  const personnes = household.membres
+    .filter((m) => m.id in nuitsParMembre)
+    .map((m) => ({ nom: `${m.prenom} ${m.nom}`, nuits: nuitsParMembre[m.id] }));
 
   await sendGiteRequestEmail({
     householdId: household.id,
-    noms,
-    nombrePersonnes: noms.length,
-    nombreNuits,
+    personnes,
   });
 
   return NextResponse.json({ ok: true });

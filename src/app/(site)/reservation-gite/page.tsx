@@ -4,6 +4,7 @@ import { getHouseholdById } from "@/lib/guests";
 import { getHouseholdGiteRequests } from "@/lib/gite";
 import ScrollReveal from "@/components/hero/ScrollReveal";
 import GiteReservationForm from "@/components/gite/GiteReservationForm";
+import { PRIX_NUIT_PAR_PERSONNE } from "@/lib/giteTarif";
 
 export const dynamic = "force-dynamic";
 
@@ -30,7 +31,8 @@ export default async function ReservationGitePage() {
         barbecue vous y attendent.
         <br />
         <br />
-        Le prix est fixé à 30€ par nuit et par personne. Si l&apos;aventure vous tente,
+        Le prix est fixé à {PRIX_NUIT_PAR_PERSONNE}€ par nuit et par personne, à régler en
+        espèces. Si l&apos;aventure vous tente,
         laissez-nous une demande ci-dessous.
       </p>
 
