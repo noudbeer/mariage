@@ -34,7 +34,7 @@ monté en volume).
 ```bash
 cp .env.example .env   # renseigner SESSION_SECRET, ADMIN_EMAILS, WEDDING_DATE...
 # Créer data/guests.json (voir data/GUESTS_GUIDE.md) et data/temoins.json (voir data/temoins.example.json)
-touch data/rsvp.db && chmod 666 data/rsvp.db   # requis : le conteneur écrit avec un utilisateur non-root
+mkdir -p data/db && sudo chown 1001:1001 data/db   # requis : le conteneur écrit avec un utilisateur non-root (uid 1001)
 docker compose up -d --build
 ```
 
@@ -98,7 +98,7 @@ sudo -u deploy mkdir -p /srv/mariage/data /srv/mariage/public/photos
 cd /srv/mariage
 cp .env.example .env   # renseigner SESSION_SECRET, ADMIN_EMAILS, WEDDING_DATE...
 # Créer data/guests.json (voir data/GUESTS_GUIDE.md) et data/temoins.json (voir data/temoins.example.json)
-touch data/rsvp.db && chmod 666 data/rsvp.db
+sudo mkdir -p data/db && sudo chown 1001:1001 data/db   # dossier de la base SQLite (WAL), voir docker-compose.yml
 ```
 
 Puis créer `/srv/mariage/docker-compose.yml` (ce fichier n'a pas besoin d'être versionné — il ne
@@ -112,10 +112,14 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      RSVP_DB_PATH: /app/data/db/rsvp.db
     volumes:
       - ./data/guests.json:/app/data/guests.json:ro
       - ./data/temoins.json:/app/data/temoins.json:ro
-      - ./data/rsvp.db:/app/data/rsvp.db
+      # le DOSSIER de la base, pas le fichier : sinon le WAL de SQLite reste dans le conteneur
+      # et est perdu à chaque déploiement
+      - ./data/db:/app/data/db
       - ./public/photos:/app/public/photos:ro
     networks:
       - reverseProxy

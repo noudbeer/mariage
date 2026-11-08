@@ -1,7 +1,9 @@
-# Avant le premier démarrage, préparer les fichiers de données sur l'hôte :
-#   touch data/rsvp.db && chmod 666 data/rsvp.db
-# Le conteneur tourne avec un utilisateur non-root (uid 1001) : sans ce chmod, l'écriture
-# dans rsvp.db (bind-mount d'un fichier hôte) échoue avec "attempt to write a readonly database".
+# Avant le premier démarrage, préparer le dossier de la base sur l'hôte :
+#   mkdir -p data/db && sudo chown 1001:1001 data/db
+# Le conteneur tourne avec un utilisateur non-root (uid 1001) qui doit pouvoir écrire dans ce dossier.
+# On monte le DOSSIER et pas le fichier rsvp.db : SQLite est en mode WAL et écrit à côté de la base
+# (rsvp.db-wal, rsvp.db-shm). Avec un bind-mount du seul fichier, ces écritures restaient dans le
+# conteneur et étaient perdues à chaque recréation (déploiement).
 
 services:
   mariage-web:
@@ -14,12 +16,14 @@ services:
       replicas: 1
     env_file:
       - .env
+    environment:
+      RSVP_DB_PATH: /app/data/db/rsvp.db
     ports:
       - "3000:3000"
     volumes:
       - ./data/guests.json:/app/data/guests.json:ro
       - ./data/temoins.json:/app/data/temoins.json:ro
-      - ./data/rsvp.db:/app/data/rsvp.db
+      - ./data/db:/app/data/db
       - ./public/photos:/app/public/photos:ro
 
 # Déploiement en prod (image GHCR + réseau Caddy partagé, sans build local) : voir le README
