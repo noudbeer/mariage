@@ -52,6 +52,76 @@ export async function sendGiteRequestEmail(params: {
   });
 }
 
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function joinNames(names: string[]): string {
+  if (names.length <= 1) return names.join("");
+  return `${names.slice(0, -1).join(", ")} et ${names[names.length - 1]}`;
+}
+
+export async function sendReminderEmail(params: {
+  to: string[];
+  /** Prénoms des destinataires, pour la formule d'appel. */
+  greetingNames: string[];
+  /** Prénoms des membres du foyer dont la réponse est incomplète. */
+  pendingNames: string[];
+  /** Message libre des mariés, inséré dans le corps de l'email. */
+  message: string;
+  rsvpLink: string;
+  deadline: string | null;
+}): Promise<void> {
+  const { to, greetingNames, pendingNames, message, rsvpLink, deadline } = params;
+  const greeting = `Bonjour ${joinNames(greetingNames)},`;
+  const pendingLine = `Il nous manque encore la réponse de : ${joinNames(pendingNames)}.`;
+  const deadlineLine = deadline ? `Merci de nous répondre avant le ${deadline}.` : "";
+  const subject = "Petit rappel : confirmez votre présence — Mariage Tiffany & Simon";
+
+  // Mode test : le mail part uniquement vers l'adresse de test, avec les vrais destinataires
+  // indiqués dans le sujet et en tête du message.
+  const testRecipient = config.relanceTestRecipient;
+  const testBanner = testRecipient ? `[TEST] Destinataires réels : ${to.join(", ")}` : "";
+
+  await getTransporter().sendMail({
+    from: config.smtpFrom,
+    to: testRecipient || to,
+    replyTo: config.contactEmail,
+    subject: testRecipient ? `[TEST] ${subject}` : subject,
+    text: [
+      testBanner,
+      greeting,
+      message,
+      pendingLine,
+      deadlineLine,
+      `Pour répondre, connectez-vous avec votre adresse email : ${rsvpLink}`,
+      "À très bientôt,\nTiffany & Simon",
+    ]
+      .filter(Boolean)
+      .join("\n\n"),
+    html: `
+      ${testBanner ? `<p style="padding:8px;background:#fff3cd;font-size:13px;">${escapeHtml(testBanner)}</p>` : ""}
+      <p>${escapeHtml(greeting)}</p>
+      <p>${escapeHtml(message).replace(/\n/g, "<br>")}</p>
+      <p>${escapeHtml(pendingLine)}</p>
+      ${deadlineLine ? `<p><strong>${escapeHtml(deadlineLine)}</strong></p>` : ""}
+      <p style="text-align:center;margin:24px 0;">
+        <a href="${rsvpLink}" style="display:inline-block;padding:12px 24px;background:#d6336c;color:#ffffff;text-decoration:none;border-radius:9999px;font-weight:bold;">
+          Confirmer ma présence
+        </a>
+      </p>
+      <p style="color:#8c6e74;font-size:13px;">
+        Connectez-vous avec votre adresse email : vous recevrez un code de connexion.
+      </p>
+      <p>À très bientôt,<br>Tiffany &amp; Simon</p>
+    `,
+  });
+}
+
 export async function sendOtpEmail(params: {
   to: string;
   code: string;

@@ -10,7 +10,15 @@ export default function AdminPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
-      <h1 className="text-2xl font-semibold">Récapitulatif des réponses</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold">Récapitulatif des réponses</h1>
+        <a
+          href="/admin/relance"
+          className="rounded-md bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white"
+        >
+          Relancer les invités
+        </a>
+      </div>
 
       <div className="mt-8 overflow-x-auto">
         <table className="w-full min-w-[720px] border-collapse text-sm">
