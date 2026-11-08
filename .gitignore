@@ -42,6 +42,7 @@ next-env.d.ts
 
 # données réelles (PII des invités/témoins) et base RSVP : jamais versionnées
 /data/guests.json
+/data/guestlegacy.json
 /data/temoins.json
 /data/rsvp.db
 /data/rsvp.db-journal
