@@ -47,6 +47,7 @@ export async function sendGiteRequestEmail(params: {
   await getTransporter().sendMail({
     from: config.smtpFrom,
     to: config.contactEmail,
+    cc: config.giteCcEmails,
     subject: `[Site mariage] Demande de gîte — foyer ${householdId}`,
     text: `Nouvelle demande de réservation du gîte :\n\nFoyer : ${householdId}\nPersonnes concernées :\n${detail}\nNombre de personnes : ${personnes.length}\nTotal nuitées : ${totalNuitees}\nEstimation : ${totalEuros} € (${PRIX_NUIT_PAR_PERSONNE} € par nuit et par personne, en espèces)\n\nCeci est une simple demande, à recontacter pour validation.`,
   });

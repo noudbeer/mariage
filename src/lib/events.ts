@@ -56,7 +56,7 @@ export const EVENTS: Record<EventKey, EventInfo> = {
   brunch_lendemain: {
     key: "brunch_lendemain",
     label: "Brunch du lendemain",
-    date: "2027-08-11",
+    date: "2027-08-10",
     heure: "Midi",
     lieu: "La Grange à Jules",
     description: "Pour prolonger la fête en douceur.",

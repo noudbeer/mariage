@@ -66,6 +66,14 @@ export const config = {
   get contactEmail() {
     return process.env.CONTACT_EMAIL ?? "simon@bernoud.fr";
   },
+  // Adresses mises en copie des demandes de gîte (séparées par des virgules), en plus de
+  // CONTACT_EMAIL. Vide par défaut.
+  get giteCcEmails() {
+    return (process.env.GITE_CC_EMAILS ?? "")
+      .split(",")
+      .map((e) => e.trim())
+      .filter(Boolean);
+  },
   // Mode test des relances (/admin/relance) : tant que cette adresse est définie, tous les mails
   // de relance lui sont envoyés au lieu des invités. Actif par défaut, par sécurité : pour
   // envoyer réellement aux invités, mettre explicitement RELANCE_TEST_RECIPIENT= (vide) dans .env.
