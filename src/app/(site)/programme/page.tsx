@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { redirect } from "next/navigation";
 import { getSession } from "@/lib/session";
 import { getHouseholdById } from "@/lib/guests";
-import { EVENTS, EVENT_ORDER, formatEventDate } from "@/lib/events";
+import { EVENTS, EVENT_ORDER, PROGRAM_STEPS, formatEventDate } from "@/lib/events";
 import ScrollReveal from "@/components/hero/ScrollReveal";
 
 export default async function ProgrammePage() {
@@ -30,14 +30,21 @@ export default async function ProgrammePage() {
           }))
           .filter(({ invitedEvents }) => invitedEvents.length > 0)
           .map(({ member, invitedEvents }, index) => {
-            const days = new Map<string, (typeof invitedEvents)[number][]>();
-            for (const key of invitedEvents) {
-              const date = EVENTS[key].date;
-              const existing = days.get(date);
+            const items = invitedEvents.flatMap((key) => [
+              ...PROGRAM_STEPS.filter((step) => step.avant === key).map((step) => ({
+                ...step,
+                date: EVENTS[key].date,
+              })),
+              { ...EVENTS[key], id: key },
+            ]);
+
+            const days = new Map<string, typeof items>();
+            for (const item of items) {
+              const existing = days.get(item.date);
               if (existing) {
-                existing.push(key);
+                existing.push(item);
               } else {
-                days.set(date, [key]);
+                days.set(item.date, [item]);
               }
             }
 
@@ -56,16 +63,15 @@ export default async function ProgrammePage() {
                       {member.prenom} {member.nom}
                     </h2>
                     <div className="flex flex-col gap-6">
-                      {[...days.entries()].map(([date, keys]) => (
+                      {[...days.entries()].map(([date, dayItems]) => (
                         <div key={date}>
                           <h3 className="mb-2 text-sm font-semibold uppercase tracking-wide text-[var(--color-primary)]">
                             {formatEventDate(date)}
                           </h3>
                           <ol className="flex flex-col gap-4 border-l-2 border-[var(--color-primary-soft)] pl-4">
-                            {keys.map((key) => {
-                              const event = EVENTS[key];
+                            {dayItems.map((event) => {
                               return (
-                                <li key={key}>
+                                <li key={event.id}>
                                   <p className="font-medium text-[var(--color-primary)]">
                                     {event.label}
                                   </p>

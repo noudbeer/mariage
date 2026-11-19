@@ -63,6 +63,29 @@ export const EVENTS: Record<EventKey, EventInfo> = {
   },
 };
 
+// Étapes purement informatives : affichées dans le programme mais sans RSVP.
+// Chacune est placée juste avant l'événement `avant`, et n'est montrée qu'aux
+// membres invités à cet événement.
+export interface ProgramStep {
+  id: string;
+  avant: EventKey;
+  label: string;
+  heure: string;
+  lieu: string;
+  description: string;
+}
+
+export const PROGRAM_STEPS: ProgramStep[] = [
+  {
+    id: "accueil_invites",
+    avant: "ceremonie_religieuse",
+    label: "Accueil des invités",
+    heure: "De 13h à 13h30",
+    lieu: "La Grange à Jules",
+    description: "Installez-vous avant le début de la cérémonie.",
+  },
+];
+
 export function formatEventDate(date: string): string {
   return new Date(`${date}T00:00:00`).toLocaleDateString("fr-FR", {
     weekday: "long",
