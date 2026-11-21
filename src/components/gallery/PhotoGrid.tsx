@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ImmichRecentAsset } from "@/lib/immich";
 
 interface Props {
@@ -31,6 +31,24 @@ export default function PhotoGrid({ assets }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [openIndex, close, prev, next]);
 
+  // Balayage horizontal (mobile) : gauche → suivante, droite → précédente.
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+  function onTouchStart(e: React.TouchEvent) {
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  }
+  function onTouchEnd(e: React.TouchEvent) {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start || assets.length < 2) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+    if (dx < 0) next();
+    else prev();
+  }
+
   const current = openIndex !== null ? assets[openIndex] : null;
 
   return (
@@ -42,7 +60,7 @@ export default function PhotoGrid({ assets }: Props) {
             type="button"
             onClick={() => setOpenIndex(i)}
             aria-label={asset.type === "VIDEO" ? "Ouvrir la vidéo" : "Ouvrir la photo"}
-            className="relative aspect-square overflow-hidden rounded-lg bg-black/5"
+            className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-black/5 focus-visible:outline-2 focus-visible:outline-[var(--color-primary)]"
           >
             {asset.type === "IMAGE" ? (
               // URL Immich dynamique et authentifiée (clé en query string) : next/image
@@ -52,10 +70,10 @@ export default function PhotoGrid({ assets }: Props) {
                 src={asset.thumbnailUrl}
                 alt=""
                 loading="lazy"
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover transition duration-300 group-hover:scale-105 group-hover:brightness-90"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-[var(--color-primary-soft)]/40 text-3xl">
+              <div className="flex h-full w-full items-center justify-center bg-[var(--color-primary-soft)]/40 text-3xl transition duration-300 group-hover:brightness-90">
                 🎬
               </div>
             )}
@@ -67,12 +85,14 @@ export default function PhotoGrid({ assets }: Props) {
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
           onClick={close}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
         >
           <button
             type="button"
             onClick={close}
             aria-label="Fermer"
-            className="absolute right-4 top-4 text-3xl text-white/90 hover:text-white"
+            className="absolute z-10 cursor-pointer p-2 right-4 top-4 text-3xl text-white/90 hover:text-white"
           >
             ×
           </button>
@@ -86,7 +106,7 @@ export default function PhotoGrid({ assets }: Props) {
                   prev();
                 }}
                 aria-label="Photo précédente"
-                className="absolute left-2 text-4xl text-white/90 hover:text-white sm:left-6"
+                className="absolute z-10 cursor-pointer p-2 left-2 text-4xl text-white/90 hover:text-white sm:left-6"
               >
                 ‹
               </button>
@@ -97,7 +117,7 @@ export default function PhotoGrid({ assets }: Props) {
                   next();
                 }}
                 aria-label="Photo suivante"
-                className="absolute right-2 text-4xl text-white/90 hover:text-white sm:right-6"
+                className="absolute z-10 cursor-pointer p-2 right-2 text-4xl text-white/90 hover:text-white sm:right-6"
               >
                 ›
               </button>

@@ -27,9 +27,9 @@ export const config = {
   get immichShareUrl() {
     return process.env.IMMICH_SHARE_URL ?? "";
   },
-  // Clé du lien de partage Immich (visible dans l'URL des vignettes de la page publique,
-  // ex. ?key=...) — permet d'appeler l'API Immich pour afficher les dernières photos
-  // directement sur /galerie. Laisser vide pour se contenter du lien/bouton vers Immich.
+  // Clé du lien de partage Immich (ex. ?key=...). Facultative : si vide, l'authentification
+  // est déduite de IMMICH_SHARE_URL (/s/<slug> → ?slug=..., /share/<key> → ?key=...), ce qui
+  // suffit pour afficher les dernières photos de l'album directement sur /galerie.
   get immichShareKey() {
     return process.env.IMMICH_SHARE_KEY ?? "";
   },
