@@ -12,12 +12,20 @@ export default function AdminPage() {
     <main className="mx-auto max-w-5xl px-6 py-16">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Récapitulatif des réponses</h1>
-        <a
-          href="/admin/relance"
-          className="rounded-md bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white"
-        >
-          Relancer les invités
-        </a>
+        <div className="flex flex-wrap gap-3">
+          <a
+            href="/admin/gite"
+            className="rounded-md border border-[var(--color-primary)] px-4 py-2 text-sm font-medium text-[var(--color-primary)]"
+          >
+            Demandes de gîte
+          </a>
+          <a
+            href="/admin/relance"
+            className="rounded-md bg-[var(--color-primary)] px-4 py-2 text-sm font-medium text-white"
+          >
+            Relancer les invités
+          </a>
+        </div>
       </div>
 
       <div className="mt-8 overflow-x-auto">

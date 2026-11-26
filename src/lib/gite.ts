@@ -13,6 +13,22 @@ export interface GiteRequest {
   createdAt: string;
 }
 
+type GiteRequestRow = typeof giteRequests.$inferSelect;
+
+function toGiteRequest(row: GiteRequestRow): GiteRequest {
+  return {
+    id: row.id,
+    submittedByMemberId: row.submittedByMemberId,
+    memberIds: JSON.parse(row.memberIds) as string[],
+    nombrePersonnes: row.nombrePersonnes,
+    nombreNuits: row.nombreNuits,
+    nuitsParMembre: row.nuitsParMembre
+      ? (JSON.parse(row.nuitsParMembre) as Record<string, number>)
+      : null,
+    createdAt: row.createdAt,
+  };
+}
+
 export function getHouseholdGiteRequests(householdId: string): GiteRequest[] {
   const rows = getDb()
     .select()
@@ -20,18 +36,16 @@ export function getHouseholdGiteRequests(householdId: string): GiteRequest[] {
     .where(eq(giteRequests.householdId, householdId))
     .all();
 
-  return rows
-    .map((row) => ({
-      id: row.id,
-      submittedByMemberId: row.submittedByMemberId,
-      memberIds: JSON.parse(row.memberIds) as string[],
-      nombrePersonnes: row.nombrePersonnes,
-      nombreNuits: row.nombreNuits,
-      nuitsParMembre: row.nuitsParMembre
-        ? (JSON.parse(row.nuitsParMembre) as Record<string, number>)
-        : null,
-      createdAt: row.createdAt,
-    }))
+  return rows.map(toGiteRequest).sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
+/** Toutes les demandes, tous foyers confondus, de la plus récente à la plus ancienne. */
+export function getAllGiteRequests(): (GiteRequest & { householdId: string })[] {
+  return getDb()
+    .select()
+    .from(giteRequests)
+    .all()
+    .map((row) => ({ ...toGiteRequest(row), householdId: row.householdId }))
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
