@@ -8,6 +8,19 @@ export default function AdminPage() {
   const { foyers } = loadGuests();
   const rows = getAllRsvpRows();
 
+  // Personnes ayant confirmé leur présence, par événement (uniquement parmi les invités à cet événement).
+  const invitedMembers = foyers.flatMap((h) => h.membres);
+  const confirmedCount = Object.fromEntries(
+    EVENT_KEYS.map((key) => [
+      key,
+      invitedMembers.filter(
+        (m) =>
+          m.invitations[key] &&
+          rows.some((r) => r.memberId === m.id && r.eventKey === key && r.status === "confirmed"),
+      ).length,
+    ]),
+  );
+
   return (
     <main className="mx-auto max-w-5xl px-6 py-16">
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -40,6 +53,17 @@ export default function AdminPage() {
                 </th>
               ))}
               <th className="py-2 pr-4">Remarque</th>
+            </tr>
+            <tr className="border-b border-black/10 bg-black/[0.03] font-medium">
+              <td colSpan={2} className="py-2 pr-4">
+                Présents
+              </td>
+              {EVENT_KEYS.map((key) => (
+                <td key={key} className="py-2 pr-4">
+                  {confirmedCount[key]}
+                </td>
+              ))}
+              <td />
             </tr>
           </thead>
           <tbody>
